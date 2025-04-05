@@ -10,7 +10,8 @@ public partial class MainView : ContentPage
 		this.viewModel = viewModel;
 		InitializeComponent();
 		BindingContext=viewModel;
-	}
+        Title = "Home version 1.0";
+    }
 	protected override async void OnNavigatedTo(NavigatedToEventArgs args)
 	{
         base.OnNavigatedTo(args);
