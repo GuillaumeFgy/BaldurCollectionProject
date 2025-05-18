@@ -1,5 +1,4 @@
 ﻿using Microcharts;
-using Microsoft.Maui.Graphics;
 using SkiaSharp;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MyApp.Model;
@@ -9,7 +8,10 @@ namespace MyApp.ViewModel;
 public partial class GraphViewModel : ObservableObject
 {
     [ObservableProperty]
-    public Chart myObservableChart;
+    public Chart classChart;
+
+    [ObservableProperty]
+    public Chart raceChart;
 
     public GraphViewModel()
     {
@@ -20,12 +22,14 @@ public partial class GraphViewModel : ObservableObject
     {
         if (Globals.MyBaldurCharacters.Count == 0)
         {
-            myObservableChart = null!;
+            ClassChart = null!;
+            RaceChart = null!;
             return;
         }
 
-        var grouped = Globals.MyBaldurCharacters
-            .GroupBy(c => string.IsNullOrWhiteSpace(c.Faction) ? "Unknown" : c.Faction)
+        // Graphique des classes
+        var classEntries = Globals.MyBaldurCharacters
+            .GroupBy(c => string.IsNullOrWhiteSpace(c.Class) ? "Inconnue" : c.Class)
             .Select(g => new ChartEntry(g.Count())
             {
                 Label = g.Key,
@@ -33,9 +37,28 @@ public partial class GraphViewModel : ObservableObject
                 Color = SKColor.Parse(GenerateRandomColorHex())
             }).ToList();
 
-        MyObservableChart = new PieChart
+        ClassChart = new PieChart
         {
-            Entries = grouped,
+            Entries = classEntries,
+            LabelTextSize = 32,
+            HoleRadius = 0.4f,
+            IsAnimated = true,
+            BackgroundColor = SKColors.White
+        };
+
+        // Graphique des races
+        var raceEntries = Globals.MyBaldurCharacters
+            .GroupBy(c => string.IsNullOrWhiteSpace(c.Race) ? "Inconnue" : c.Race)
+            .Select(g => new ChartEntry(g.Count())
+            {
+                Label = g.Key,
+                ValueLabel = g.Count().ToString(),
+                Color = SKColor.Parse(GenerateRandomColorHex())
+            }).ToList();
+
+        RaceChart = new PieChart
+        {
+            Entries = raceEntries,
             LabelTextSize = 32,
             HoleRadius = 0.4f,
             IsAnimated = true,

@@ -1,10 +1,4 @@
 ﻿using CommunityToolkit.Maui.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MyApp.Service;
 
@@ -16,57 +10,101 @@ public class CSVServices
 
         var result = await FilePicker.PickAsync(new PickOptions
         {
-            PickerTitle = "Sélectionnez un fichier CSV"
+            PickerTitle = "Select a CSV file"
         });
 
-        if (result != null)
+        if (result == null)
         {
-            var lines = await File.ReadAllLinesAsync(result.FullPath, Encoding.UTF8);
+            await Application.Current.MainPage.DisplayAlert("Info", "No file selected.", "OK");
+            return list;
+        }
 
-            var headers = lines[0].Split(';');
-            var properties = typeof(BaldurCharacter).GetProperties();
+        try
+        {
+            using var stream = new FileStream(result.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            for (int i = 1; i < lines.Length; i++)
+            var lines = new List<string>();
+            while (!reader.EndOfStream)
             {
-                BaldurCharacter obj = new();
+                var line = await reader.ReadLineAsync();
+                if (!string.IsNullOrWhiteSpace(line))
+                    lines.Add(line);
+            }
 
+            if (lines.Count < 2)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "The selected file is empty or contains no data.", "OK");
+                return list;
+            }
+
+            // Check header
+            var headers = lines[0].Split(';');
+            if (!headers.SequenceEqual(new[] { "Id", "Name", "Picture", "Class", "Race", "Quote" }))
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "The CSV file format is invalid.", "OK");
+                return list;
+            }
+
+            for (int i = 1; i < lines.Count; i++)
+            {
                 var values = lines[i].Split(';');
 
-                for (int j = 0; j < headers.Length; j++)
+                if (values.Length < 6)
+                    continue; // Incomplete line
+
+                var obj = new BaldurCharacter
                 {
-                    var property = properties.FirstOrDefault(p => p.Name.Equals(headers[j], StringComparison.OrdinalIgnoreCase));
-                    
-                    if (property != null && j < values.Length)
-                    {
-                        object value = Convert.ChangeType(values[j], property.PropertyType);
-                        property.SetValue(obj, value);
-                    }
-                }
+                    Id = values[0],
+                    Name = values[1],
+                    Picture = values[2],
+                    Class = values[3],
+                    Race = values[4],
+                    Quote = values[5]
+                };
 
                 list.Add(obj);
             }
         }
+        catch (IOException)
+        {
+            await Application.Current.MainPage.DisplayAlert("Read Error", "The file is open in another program. Please close it and try again.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Unable to read the file: {ex.Message}", "OK");
+        }
+
         return list;
     }
-    public async Task PrintData<T>(List<T> data)
+
+    public async Task PrintData(List<BaldurCharacter> data)
     {
         var csv = new StringBuilder();
-        var properties = typeof(T).GetProperties();
-        csv.AppendLine(string.Join(";", properties.Select(p => p.Name)));
+        csv.AppendLine("Id;Name;Picture;Class;Race;Quote");
 
         foreach (var item in data)
         {
-            var values = properties.Select(p => p.GetValue(item)?.ToString() ?? "");
-            csv.AppendLine(string.Join(";", values));
+            var line = string.Join(";", new[]
+            {
+                item.Id,
+                item.Name,
+                item.Picture,
+                item.Class,
+                item.Race,
+                item.Quote
+            });
+
+            csv.AppendLine(line);
         }
+
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv.ToString()));
         var fileSaverResult = await FileSaver.Default.SaveAsync("Collection.csv", stream);
 
-        if (fileSaverResult.IsSuccessful)
+        if (!fileSaverResult.IsSuccessful)
         {
-        }
-        else
-        {
+            await Application.Current.MainPage.DisplayAlert("Error", "Unable to save the file.", "OK");
         }
     }
 }
+

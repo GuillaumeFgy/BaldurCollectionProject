@@ -12,70 +12,77 @@ namespace MyApp.Service;
 
 public class JSONServices
 {
-
-    internal async Task<List<BaldurCharacter>> GetStrangeAnimals()
+    internal async Task<List<BaldurCharacter>> GetUserCharacters()
     {
-        //var url = "http://localhost:32774/json?FileName=BG3.json";
         var url = "https://185.157.245.38:5000/json?FileName=BG3.json";
 
-        List<BaldurCharacter> MyList = new();
-
         var handler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         };
-
-        HttpClient _httpClient = new HttpClient(handler);
+        HttpClient _httpClient = new(handler);
 
         var response = await _httpClient.GetAsync(url);
-             
 
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStreamAsync();
+        if (!response.IsSuccessStatusCode)
+            return new List<BaldurCharacter>();
 
-            MyList = JsonSerializer.Deserialize<List<BaldurCharacter>>(content) ?? new List<BaldurCharacter>();
-        }
+        var content = await response.Content.ReadAsStreamAsync();
+        var allData = await JsonSerializer.DeserializeAsync<List<UserCharacterData>>(content) ?? new();
 
-        return MyList ?? new List<BaldurCharacter>();
+        var userId = Session.CurrentUser?.Id ?? "anonymous";
+        return allData.FirstOrDefault(d => d.UserId == userId)?.Characters ?? new();
     }
 
-    internal async Task SetStrangeAnimals(List<BaldurCharacter> MyList)
+    internal async Task SetUserCharacters(List<BaldurCharacter> updatedCharacters)
     {
-        //var url = "http://localhost:32774/json";
         var url = "https://185.157.245.38:5000/json";
-                   
-        MemoryStream mystream = new();
+        var userId = Session.CurrentUser?.Id ?? "anonymous";
 
         var handler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
         };
+        HttpClient _httpClient = new(handler);
 
-        HttpClient _httpClient = new HttpClient(handler);
+        // 1. Télécharger tout le fichier
+        var getResponse = await _httpClient.GetAsync($"{url}?FileName=BG3.json");
 
-        JsonSerializer.Serialize(mystream, MyList);
+        List<UserCharacterData> allData = [];
 
+        if (getResponse.IsSuccessStatusCode)
+        {
+            var content = await getResponse.Content.ReadAsStreamAsync();
+            allData = await JsonSerializer.DeserializeAsync<List<UserCharacterData>>(content) ?? new();
+        }
+
+        // 2. Remplacer les données de l'utilisateur courant
+        var existing = allData.FirstOrDefault(u => u.UserId == userId);
+        if (existing != null)
+            existing.Characters = updatedCharacters;
+        else
+            allData.Add(new UserCharacterData { UserId = userId, Characters = updatedCharacters });
+
+        // 3. Envoyer tout le fichier modifié
+        using var mystream = new MemoryStream();
+        await JsonSerializer.SerializeAsync(mystream, allData);
         mystream.Position = 0;
 
         var fileContent = new ByteArrayContent(mystream.ToArray());
+        var contentToSend = new MultipartFormDataContent
+    {
+        { fileContent, "file", "BG3.json" }
+    };
 
-        var content = new MultipartFormDataContent
+        var postResponse = await _httpClient.PostAsync(url, contentToSend);
+        if (postResponse.IsSuccessStatusCode)
         {
-            { fileContent, "file", "BG3.json"}
-        };
-
-        var response = await _httpClient.PostAsync(url, content);
-
-        if (response.IsSuccessStatusCode)
-        {
-            await Application.Current.MainPage.DisplayAlert("Success", "Json Sent", "OK");
-            await Shell.Current.GoToAsync("..");
+            await Application.Current.MainPage.DisplayAlert("Success", "Data saved successfully.", "OK");
         }
         else
         {
-            await Application.Current.MainPage.DisplayAlert("Failed", "Json not Sent", "OK");
-            await Shell.Current.GoToAsync("..");
+            await Application.Current.MainPage.DisplayAlert("Error", "Failed to save JSON data.", "OK");
         }
+
     }
 }

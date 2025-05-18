@@ -26,9 +26,18 @@ public partial class DetailsView : ContentPage
         viewModel.ClosePage();
     }
 
+    private void OnEntryCompleted(object sender, EventArgs e)
+    {
+        if (sender is Entry entry)
+        {
+            entry.Text = string.Empty;
+        }
+    }
+
     private async void MyAnimatedButton_Clicked(object sender, EventArgs e)
     {
         await MyAnimatedButton.ScaleTo(1.1, 100);
         await MyAnimatedButton.ScaleTo(1.0, 100);
     }
+
 }

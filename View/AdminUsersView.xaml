@@ -1,0 +1,113 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyApp.View.AdminUsersView"
+             Title="User Management"
+             BackgroundColor="#1B1B1B">
+
+    <Shell.TitleView>
+        <Label Text="User Management"
+               FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+               TextColor="#FFD700"
+               FontSize="24"
+               HorizontalOptions="Center"
+               BackgroundColor="#1B1B1B"/>
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+        <!-- Title -->
+        <Style x:Key="TitleLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#FFD700" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative" />
+        </Style>
+
+        <!-- Labels -->
+        <Style x:Key="FantasyLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#EAD7B7" />
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <!-- Input -->
+        <Style x:Key="FantasyEntry" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#2C2C2C" />
+            <Setter Property="TextColor" Value="#F5DEB3" />
+            <Setter Property="PlaceholderColor" Value="#888888" />
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative" />
+            <Setter Property="HeightRequest" Value="45" />
+        </Style>
+
+        <!-- Button -->
+        <Style x:Key="FantasyButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#3C2F2F" />
+            <Setter Property="TextColor" Value="#FFD700" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+
+        <!-- User Card -->
+        <Style x:Key="UserFrame" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="#2C2C2C" />
+            <Setter Property="BorderColor" Value="#8B4513" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Registered Users" Style="{StaticResource TitleLabel}" />
+
+            <!-- User List -->
+            <CollectionView ItemsSource="{Binding Users}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Style="{StaticResource UserFrame}">
+                            <VerticalStackLayout Spacing="5">
+
+                                <HorizontalStackLayout>
+                                    <Label Text="First Name: " FontAttributes="Bold" Style="{StaticResource FantasyLabel}" />
+                                    <Label Text="{Binding FirstName}" Style="{StaticResource FantasyLabel}" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout>
+                                    <Label Text="Last Name: " FontAttributes="Bold" Style="{StaticResource FantasyLabel}" />
+                                    <Label Text="{Binding LastName}" Style="{StaticResource FantasyLabel}" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout>
+                                    <Label Text="Email: " FontAttributes="Bold" Style="{StaticResource FantasyLabel}" />
+                                    <Label Text="{Binding Email}" Style="{StaticResource FantasyLabel}" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout>
+                                    <Label Text="Password (hash): " FontAttributes="Bold" Style="{StaticResource FantasyLabel}" />
+                                    <Label Text="{Binding PasswordHash}"
+                                           LineBreakMode="CharacterWrap"
+                                           FontSize="12"
+                                           TextColor="#AAAAAA"
+                                           FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Add a New User" Style="{StaticResource TitleLabel}" Margin="0,20,0,10"/>
+
+            <!-- User Form -->
+            <Entry Placeholder="First Name" Text="{Binding FirstName}" Style="{StaticResource FantasyEntry}" />
+            <Entry Placeholder="Last Name" Text="{Binding LastName}" Style="{StaticResource FantasyEntry}" />
+            <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" Style="{StaticResource FantasyEntry}" />
+            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" Style="{StaticResource FantasyEntry}" />
+            <Button Text="Add" Command="{Binding AddUserCommand}" Style="{StaticResource FantasyButton}" Margin="0,10" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

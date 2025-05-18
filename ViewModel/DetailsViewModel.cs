@@ -1,9 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Input;
+using MyApp.View;
 
 namespace MyApp.ViewModel;
 
@@ -15,26 +12,35 @@ public partial class DetailsViewModel: ObservableObject
     [ObservableProperty]
     public partial string? Name { get; set; }
     [ObservableProperty]
-    public partial string? Description { get; set; }
-    [ObservableProperty]
     public partial string? Picture { get; set; }
+
     [ObservableProperty]
     public partial string? Class { get; set; }
     [ObservableProperty]
     public partial string? Race { get; set; }
     [ObservableProperty]
-    public partial string? Faction { get; set; }
+    public partial string? Quote { get; set; }
+
     [ObservableProperty]
     public partial string? SerialBufferContent { get; set; }
     [ObservableProperty]
     public partial bool EmulatorON_OFF { get; set; } = false;
-    
+    [ObservableProperty]
+    private string manualScanId = string.Empty;
+
     readonly DeviceOrientationService MyScanner;
 
-    IDispatcherTimer emulator= Application.Current.Dispatcher.CreateTimer();
+    [ObservableProperty]
+    private string selectedPicture = "portrait_custom.png";
+
+
+
+    IDispatcherTimer emulator = Application.Current.Dispatcher.CreateTimer();
 
     readonly MainViewModel _mainViewModel;
     private string? _lastNavigatedId;
+    private string? _originalId;
+
 
 
     public DetailsViewModel(DeviceOrientationService myScanner, MainViewModel mainViewModel)
@@ -44,28 +50,8 @@ public partial class DetailsViewModel: ObservableObject
 
         MyScanner.OpenPort();
         myScanner.SerialBuffer.Changed += OnSerialDataReception;
-
-        emulator.Interval = TimeSpan.FromSeconds(1);
-        emulator.Tick += (s, e) => AddCode();
     }
 
-    partial void OnEmulatorON_OFFChanged(bool value)
-    {
-        if (value)
-        {
-            _lastNavigatedId = null;
-            emulator.Start();
-        }
-        else
-        {
-            emulator.Stop();
-        }
-    }
-
-    private void AddCode()
-    {
-        MyScanner.SerialBuffer.Enqueue("1");
-    }
     private async void OnSerialDataReception(object sender, EventArgs arg)
     {
         if (!EmulatorON_OFF) return;
@@ -78,7 +64,6 @@ public partial class DetailsViewModel: ObservableObject
             if (!string.IsNullOrWhiteSpace(incoming))
             {
                 SerialBufferContent += incoming;
-                OnPropertyChanged(nameof(SerialBufferContent));
 
                 // Check if already navigated for this ID
                 if (incoming == _lastNavigatedId)
@@ -88,9 +73,21 @@ public partial class DetailsViewModel: ObservableObject
                 if (recognized != null)
                 {
                     _lastNavigatedId = incoming;
+                    await Application.Current.Dispatcher.DispatchAsync(() =>
+                    {
+                        var popup = new CharacterQuotePopup(recognized);
+                        Application.Current.MainPage.ShowPopup(popup);
+                    });
                     await _mainViewModel.GoToDetails(recognized.Id);
                 }
             }
+        }
+    }
+    partial void OnManualScanIdChanged(string value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            MyScanner.SerialBuffer.Enqueue(value.Trim());
         }
     }
 
@@ -101,16 +98,19 @@ public partial class DetailsViewModel: ObservableObject
         {
             if (Id == item.Id)
             {
+                _originalId = item.Id;
                 Name = item.Name;
-                Description = item.Description;
                 Picture = item.Picture;
                 Class = item.Class;
                 Race = item.Race;
-                Faction = item.Faction;
+                Quote = item.Quote;
+                SelectedPicture = item.Picture;
                 break;
             }
         }
     }
+
+
     internal void ClosePage()
     {
         MyScanner.SerialBuffer.Changed -= OnSerialDataReception;
@@ -120,36 +120,61 @@ public partial class DetailsViewModel: ObservableObject
     [RelayCommand]
     internal async Task ChangeObjectParameters()
     {
-        var existing = Globals.MyBaldurCharacters.FirstOrDefault(item => item.Id == Id);
+        // Vérification de champs obligatoires
+        if (string.IsNullOrWhiteSpace(Name) ||
+            string.IsNullOrWhiteSpace(Class) ||
+            string.IsNullOrWhiteSpace(Race))
+        {
+            await Application.Current.MainPage.DisplayAlert("Missing Fields", "Please fill in all required fields (Name, Class, Race).", "OK");
+
+            return;
+        }
+
+        var existing = Globals.MyBaldurCharacters.FirstOrDefault(item => item.Id == _originalId);
 
         if (existing != null)
         {
-            existing.Name = Name ?? string.Empty;
-            existing.Description = Description ?? string.Empty;
-            existing.Picture = Picture ?? string.Empty;
-            existing.Class = Class ?? string.Empty;
-            existing.Race = Race ?? string.Empty;
-            existing.Faction = Faction ?? string.Empty;
-
+            existing.Id = Id ?? existing.Id;
+            existing.Name = Name.Trim();
+            existing.Picture = SelectedPicture ?? string.Empty;
+            existing.Class = Class.Trim();
+            existing.Race = Race.Trim();
+            existing.Quote = Quote.Trim();
         }
+
         else
         {
             var newCharacter = new BaldurCharacter
             {
-                Id = Id ?? Guid.NewGuid().ToString(), 
-                Name = Name ?? string.Empty,
-                Description = Description ?? string.Empty,
-                Picture = Picture ?? string.Empty,
-                Class = Class ?? string.Empty,
-                Race = Race ?? string.Empty,
-                Faction = Faction ?? string.Empty
+                Id = Id ?? Guid.NewGuid().ToString(),
+                Name = Name.Trim(),
+                Picture = string.IsNullOrWhiteSpace(Picture) ? "portrait_custom.png" : Picture.Trim(),
+                Class = Class.Trim(),
+                Race = Race.Trim(),
+                Quote = Quote?.Trim() ?? string.Empty
             };
+
 
             Globals.MyBaldurCharacters.Add(newCharacter);
         }
 
-        await Application.Current.MainPage.DisplayAlert("Success", "Changes have been applied.", "OK");
+        await Application.Current.MainPage.DisplayAlert("Success", "Changes have been saved.", "OK");
+
+        // Enregistrer automatiquement sur le serveur
+        await new JSONServices().SetUserCharacters(Globals.MyBaldurCharacters);
         await Shell.Current.GoToAsync("..");
     }
 
+    [RelayCommand]
+    public async Task OpenImagePopup()
+    {
+        var popup = new ImagePickerPopup();
+        var result = await Application.Current.MainPage.ShowPopupAsync(popup);
+
+        if (result is string selectedImage)
+        {
+            SelectedPicture = selectedImage;
+            Picture = Path.GetFileName(selectedImage); // sauvegarde sans le "Images/"
+        }
+    }
 }

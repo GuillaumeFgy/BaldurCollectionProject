@@ -10,10 +10,8 @@ namespace MyApp.Service;
 public partial class DeviceOrientationService
 {
     public QueueBuffer SerialBuffer = new();
-
     public partial void OpenPort();
     public partial void ClosePort();
-  
     public sealed partial class QueueBuffer : Queue
     {
         public event EventHandler? Changed;

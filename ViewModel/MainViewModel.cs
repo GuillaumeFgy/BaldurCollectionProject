@@ -35,11 +35,24 @@ public partial class MainViewModel : BaseViewModel
 
         IsBusy = false;
     }
+
+    [RelayCommand]
+    internal async Task GoToUserPage()
+    {
+        IsBusy = true;
+        await Shell.Current.GoToAsync("UserView");
+    }
+
+    [RelayCommand]
+    internal async Task EditUser(string userId)
+    {
+        await Shell.Current.GoToAsync($"UserView?userId={userId}");
+    }
+
     [RelayCommand]
     internal async Task GoToGraph()
     {
         IsBusy = true;
-
         await Shell.Current.GoToAsync("GraphView", true);
 
         IsBusy = false;
@@ -61,39 +74,77 @@ public partial class MainViewModel : BaseViewModel
 
         var newItems = await MyCSVServices.LoadData();
 
+        bool addedAny = false;
+
         foreach (var newItem in newItems)
         {
-            bool alreadyExists = Globals.MyBaldurCharacters.Any(item => item.Id == newItem.Id);
-            if (!alreadyExists)
+            var existing = Globals.MyBaldurCharacters.FirstOrDefault(item => item.Id == newItem.Id);
+            if (existing != null)
+            {
+                // Mise à jour des champs existants
+                existing.Name = newItem.Name;
+                existing.Picture = newItem.Picture;
+                existing.Class = newItem.Class;
+                existing.Race = newItem.Race;
+                existing.Quote = newItem.Quote;
+            }
+            else
             {
                 Globals.MyBaldurCharacters.Add(newItem);
+                addedAny = true;
             }
         }
 
+
         await RefreshPage();
+
+        if (addedAny)
+        {
+            await MyJSONService.SetUserCharacters(Globals.MyBaldurCharacters);
+        }
 
         IsBusy = false;
     }
+
+
 
     [RelayCommand]
     internal async Task UploadJSON()
     {
         IsBusy = true;
-  
 
-        await MyJSONService.SetStrangeAnimals(Globals.MyBaldurCharacters);
+        await MyJSONService.SetUserCharacters(Globals.MyBaldurCharacters);
+
         IsBusy = false;
     }
-    
+
+
     internal async Task RefreshPage()
     {
-        MyObservableList.Clear ();
+        MyObservableList.Clear();
 
-        if(Globals.MyBaldurCharacters.Count == 0) Globals.MyBaldurCharacters = await MyJSONService.GetStrangeAnimals();
+        if (Globals.MyBaldurCharacters.Count == 0)
+            Globals.MyBaldurCharacters = await MyJSONService.GetUserCharacters();
 
         foreach (var item in Globals.MyBaldurCharacters)
         {
             MyObservableList.Add(item);
         }
     }
+
+    public bool IsAdmin => Session.CurrentUser?.Role == "admin";
+
+    [RelayCommand]
+    internal async Task GoToAdminUsersPage()
+    {
+        if (Session.CurrentUser?.Role != "admin")
+        {
+            await Application.Current.MainPage.DisplayAlert("Access Denied", "Only administrators can access this page.", "OK");
+            return;
+        }
+
+        await Shell.Current.GoToAsync(nameof(AdminUsersView));
+    }
+
+
 }

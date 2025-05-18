@@ -1,1 +1,1 @@
-D:\mauiProjects\MyApp-main\MyApp-main\MyApp.csproj;x64
+D:\mauiProjects\MyApp-main\MyAppGuillaumeFagny\MyApp.csproj;x64

@@ -1,19 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              x:Class="MyApp.View.GraphView"
-             Title="Character Factions Chart">
+             Title="Charts"
+             BackgroundColor="#1B1B1B">
 
-    <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            <Label Text="Number of Characters per Faction"
-                   FontSize="24"
-                   HorizontalOptions="Center" />
+    <Shell.TitleView>
+        <Label Text="Graphs"
+               FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+               TextColor="#FFD700"
+               FontSize="24"
+               HorizontalOptions="Center"
+               BackgroundColor="#1B1B1B"/>
+    </Shell.TitleView>
 
-            <charts:ChartView Chart="{Binding MyObservableChart}"
-                              HeightRequest="400"
-                              VerticalOptions="CenterAndExpand" />
+    <ContentPage.Resources>
+        <Style x:Key="FantasyTitleLabel" TargetType="Label">
+            <Setter Property="TextColor" Value="#FFD700"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style TargetType="microcharts:ChartView">
+            <Setter Property="HeightRequest" Value="300"/>
+            <Setter Property="BackgroundColor" Value="#2C2C2C"/>
+            <Setter Property="Margin" Value="10,0"/>
+        </Style>
+
+        <Style TargetType="VerticalStackLayout">
+            <Setter Property="Spacing" Value="30"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Label Text="Character Distribution by Class"
+                   Style="{StaticResource FantasyTitleLabel}" />
+
+            <Frame BackgroundColor="#2C2C2C" BorderColor="#8B4513" CornerRadius="10" Padding="10">
+                <microcharts:ChartView Chart="{Binding ClassChart}" />
+            </Frame>
+
+            <Label Text="Character Distribution by Race"
+                   Style="{StaticResource FantasyTitleLabel}" />
+
+            <Frame BackgroundColor="#2C2C2C" BorderColor="#8B4513" CornerRadius="10" Padding="10">
+                <microcharts:ChartView Chart="{Binding RaceChart}" />
+            </Frame>
+
         </VerticalStackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyApp.ViewModel"
+             x:Class="MyApp.View.UserView"
+             Title="Create Account"
+             BackgroundColor="#1B1B1B">
+
+    <Shell.TitleView>
+        <Label Text="Users"
+               FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+               TextColor="#FFD700"
+               FontSize="24"
+               HorizontalOptions="Center"
+               BackgroundColor="#1B1B1B"/>
+    </Shell.TitleView>
+
+    <ContentPage.Resources>
+        <Style x:Key="FantasyLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#FFD700"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="FantasyEntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="#2C2C2C"/>
+            <Setter Property="TextColor" Value="#F5DEB3"/>
+            <Setter Property="PlaceholderColor" Value="#AAAAAA"/>
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+
+        <Style x:Key="FantasyButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#3C2F2F"/>
+            <Setter Property="TextColor" Value="#FFD700"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="16">
+
+            <Label Text="Create Account" Style="{StaticResource FantasyLabelStyle}" />
+
+            <Entry Placeholder="First Name"
+                   Text="{Binding FirstName}"
+                   Style="{StaticResource FantasyEntryStyle}" />
+
+            <Entry Placeholder="Last Name"
+                   Text="{Binding LastName}"
+                   Style="{StaticResource FantasyEntryStyle}" />
+
+            <Entry Placeholder="Email"
+                   Text="{Binding Email}"
+                   Keyboard="Email"
+                   Style="{StaticResource FantasyEntryStyle}" />
+
+            <Entry Placeholder="Password"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   Style="{StaticResource FantasyEntryStyle}" />
+
+            <Button Text="Create Account"
+                    Command="{Binding AddUserCommand}"
+                    Style="{StaticResource FantasyButtonStyle}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

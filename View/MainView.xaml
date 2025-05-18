@@ -4,98 +4,114 @@
              xmlns:viewmodel="clr-namespace:MyApp.ViewModel"
              xmlns:model="clr-namespace:MyApp.Model"             
              x:Class="MyApp.View.MainView"
-             x:DataType="viewmodel:MainViewModel">
+             x:DataType="viewmodel:MainViewModel"
+             BackgroundColor="#1B1B1B">
+
+    <Shell.TitleView>
+        <Label Text="Home Version 2.0"
+           FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+           TextColor="#FFD700"
+           FontSize="24"
+           HorizontalOptions="Center"
+               BackgroundColor="#1B1B1B"/>
+    </Shell.TitleView>
+
+
+    <ContentPage.Resources>
+        <Style x:Key="FantasyButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#3C2F2F"/>
+            <Setter Property="TextColor" Value="#EAD7B7"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+
+        <Style x:Key="FantasyLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#F5DEB3"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="CinzelDecorative-Regular.ttf#Cinzel Decorative"/>
+        </Style>
+
+        <Style x:Key="FantasyBorderStyle" TargetType="Border">
+            <Setter Property="Stroke" Value="#8B4513"/>
+            <Setter Property="StrokeThickness" Value="3"/>
+            <Setter Property="BackgroundColor" Value="#2C2C2C"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 10,10,10,10"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </ContentPage.Resources>
+
     <ScrollView>
-     
         <VerticalStackLayout Spacing="20" Padding="20">
-            <Button     Text="Add object"
-                        Grid.Column="0"
-                        HorizontalOptions="Start"
-                        HeightRequest="50"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GoToDetailsCommand}"
-                        CommandParameter="0"
-                        IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-            </Button>
+
+            <Button Text="Add new character"
+                    Style="{StaticResource FantasyButtonStyle}"
+                    Command="{Binding GoToDetailsCommand}"
+                    CommandParameter="0"
+                    IsEnabled="{Binding IsNotBusy}" />
+
             <HorizontalStackLayout Spacing="10">
-                <Button     Text="Export to CSV"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            HeightRequest="50"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=PrintToCSVCommand}"
-                            CommandParameter="0"
-                            IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                </Button>
-                <Button     Text="Load from CSV"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            HeightRequest="50"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=LoadFromCSVCommand}"
-                            CommandParameter="0"
-                            IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                </Button>
-                <Button     Text="Graph"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            HeightRequest="50"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GoToGraphCommand}"
-                            CommandParameter="0"
-                            IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                </Button>
-                <Button     Text="Pop"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            HeightRequest="50"
-                            Clicked="DisplayPopup"
-                            IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                </Button>
-                <Button     Text="Upload JSON"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            HeightRequest="50"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=UploadJSONCommand}"
-                            IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                </Button>
+                <Button Text="Export to CSV"
+                        Style="{StaticResource FantasyButtonStyle}"
+                        Command="{Binding PrintToCSVCommand}"
+                        CommandParameter="0"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                <Button Text="Load from CSV"
+                        Style="{StaticResource FantasyButtonStyle}"
+                        Command="{Binding LoadFromCSVCommand}"
+                        CommandParameter="0"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                <Button Text="Graph"
+                        Style="{StaticResource FantasyButtonStyle}"
+                        Command="{Binding GoToGraphCommand}"
+                        CommandParameter="0"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                <Button Text="Upload JSON"
+                        Style="{StaticResource FantasyButtonStyle}"
+                        Command="{Binding UploadJSONCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                <Button Text="Users"
+                        Style="{StaticResource FantasyButtonStyle}"
+                        Command="{Binding GoToAdminUsersPageCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        IsVisible="{Binding IsAdmin}" />
             </HorizontalStackLayout>
 
             <CollectionView ItemsSource="{Binding MyObservableList}"
                             SelectionMode="None">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout    Orientation="Vertical"
-                                        Span="2"  
-                                        HorizontalItemSpacing="10"
-                                        VerticalItemSpacing="10" />
+                    <GridItemsLayout Orientation="Vertical" Span="2"
+                                     HorizontalItemSpacing="10"
+                                     VerticalItemSpacing="10" />
                 </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
-                    <DataTemplate  x:DataType="model:BaldurCharacter">
-                        <Border     StrokeThickness="4"
-                            StrokeShape="RoundRectangle 10,10,10,10"
-                            Padding="10">
+                    <DataTemplate x:DataType="model:BaldurCharacter">
+                        <Border Style="{StaticResource FantasyBorderStyle}">
                             <Grid HeightRequest="100" ColumnDefinitions="0.5*,*">
-                                <ImageButton  Grid.Column="0"
-                                Source="{Binding Picture}"
-                                HorizontalOptions="Start"
-                                Aspect="AspectFit"
-                                HeightRequest="100"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GoToDetailsCommand}"
-                                CommandParameter="{Binding Id}"
-                                IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}">
-                                </ImageButton>
+                                <ImageButton Grid.Column="0"
+                                             Source="{Binding Picture}"
+                                             HorizontalOptions="Start"
+                                             Aspect="AspectFit"
+                                             HeightRequest="100"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=GoToDetailsCommand}"
+                                             CommandParameter="{Binding Id}"
+                                             IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=IsNotBusy}" />
+
                                 <VerticalStackLayout Grid.Column="1">
-                                    <Label  Text="{Binding Path=Id,StringFormat='ID: {0:S2}'}"
-                                    Style="{StaticResource SubHeadline}"
-                                    FontSize="15"
-                                    HorizontalOptions="Start"
-                                    VerticalOptions="Center"/>
-                                    <Label  Text="{Binding Path=Name,StringFormat='Name: {0:S10}'}"
-                                    Style="{StaticResource SubHeadline}"
-                                    FontSize="15"
-                                    HorizontalOptions="Start"
-                                    VerticalOptions="Center"/>
-                                    <Label  Text="{Binding Path=Description,StringFormat='Description: {0:S10}'}"
-                                    Style="{StaticResource SubHeadline}"
-                                    FontSize="15"
-                                    HorizontalOptions="Start"
-                                    VerticalOptions="Center"/>
+                                    <Label Text="{Binding Path=Id,StringFormat='ID: {0:S2}'}"
+                                           Style="{StaticResource FantasyLabelStyle}" />
+                                    <Label Text="{Binding Path=Name,StringFormat='Name: {0:S10}'}"
+                                           Style="{StaticResource FantasyLabelStyle}" />
+                                    <Label Text="{Binding Path=Race,StringFormat='Race: {0:S10}'}"
+                                           Style="{StaticResource FantasyLabelStyle}" />
+                                    <Label Text="{Binding Path=Class,StringFormat='Class: {0:S10}'}"
+                                           Style="{StaticResource FantasyLabelStyle}" />
                                 </VerticalStackLayout>
                             </Grid>
                         </Border>
@@ -103,5 +119,5 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </VerticalStackLayout>
-    </ScrollView>   
+    </ScrollView>
 </ContentPage>

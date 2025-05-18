@@ -15,7 +15,7 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MyApp
-build_property.ProjectDir = D:\mauiProjects\MyApp-main\MyApp-main\
+build_property.ProjectDir = D:\mauiProjects\MyApp-main\MyAppGuillaumeFagny\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTAotExportsEnabled = 
@@ -27,50 +27,74 @@ build_property.CsWinRTUseWindowsUIXamlProjections = false
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/mauiProjects/MyApp-main/MyApp-main/App.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/AppShell.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/Resources/Styles/Colors.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/Resources/Styles/Styles.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/View/DetailsView.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/AdminUsersView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.AdminUsersView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\AdminUsersView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\AdminUsersView.xaml
+
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/CharacterQuotePopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.CharacterQuotePopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\CharacterQuotePopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\CharacterQuotePopup.xaml
+
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/DetailsView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.DetailsView.xaml
 build_metadata.AdditionalFiles.TargetPath = View\DetailsView.xaml
 build_metadata.AdditionalFiles.RelativePath = View\DetailsView.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/View/GraphView.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/GraphView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.GraphView.xaml
 build_metadata.AdditionalFiles.TargetPath = View\GraphView.xaml
 build_metadata.AdditionalFiles.RelativePath = View\GraphView.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/View/MainView.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/ImagePickerPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.ImagePickerPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = View\ImagePickerPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = View\ImagePickerPopup.xaml
+
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/LoginView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.LoginView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\LoginView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\LoginView.xaml
+
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/MainView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.MainView.xaml
 build_metadata.AdditionalFiles.TargetPath = View\MainView.xaml
 build_metadata.AdditionalFiles.RelativePath = View\MainView.xaml
 
-[D:/mauiProjects/MyApp-main/MyApp-main/View/SimplePopup.xaml]
+[D:/mauiProjects/MyApp-main/MyAppGuillaumeFagny/View/UserView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.SimplePopup.xaml
-build_metadata.AdditionalFiles.TargetPath = View\SimplePopup.xaml
-build_metadata.AdditionalFiles.RelativePath = View\SimplePopup.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = MyApp.View.UserView.xaml
+build_metadata.AdditionalFiles.TargetPath = View\UserView.xaml
+build_metadata.AdditionalFiles.RelativePath = View\UserView.xaml

@@ -18,6 +18,7 @@ namespace MyApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("CinzelDecorative-Regular.ttf", "CinzelDecorative");
                 });
 
 #if DEBUG
@@ -38,6 +39,18 @@ namespace MyApp
             builder.Services.AddSingleton<DeviceOrientationService>();
             builder.Services.AddSingleton<JSONServices>();
             builder.Services.AddSingleton<CSVServices>();
+
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddTransient<UserView>();
+            builder.Services.AddTransient<UserViewModel>();
+
+            builder.Services.AddSingleton<SerialScannerService>();
+
+            builder.Services.AddTransient<LoginView>();
+            builder.Services.AddTransient<LoginViewModel>();
+
+            builder.Services.AddTransient<AdminUsersView>();
+            builder.Services.AddTransient<AdminUsersViewModel>();
 
             return builder.Build();
         }

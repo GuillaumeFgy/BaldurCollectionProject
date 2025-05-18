@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="MyApp.View.CharacterQuotePopup"
+    Size="300,400">
+
+    <Border
+        BackgroundColor="#1B1B1B"
+        Stroke="#B8860B"
+        StrokeThickness="2"
+        StrokeShape="RoundRectangle 20"
+        Padding="20">
+
+        <VerticalStackLayout Spacing="15"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+            <Image x:Name="PortraitImage"
+                   HeightRequest="120"
+                   WidthRequest="120"
+                   Aspect="AspectFill"
+                   HorizontalOptions="Center"
+                   BackgroundColor="#2C2C2C" />
+
+            <Label x:Name="NameLabel"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#FFD700"
+                   FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+                   HorizontalOptions="Center" />
+
+            <Label x:Name="QuoteLabel"
+                   FontSize="16"
+                   FontAttributes="Italic"
+                   TextColor="#AAAAAA"
+                   FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+                   HorizontalTextAlignment="Center" />
+
+            <Button Text="Fermer"
+                    Clicked="Close_Clicked"
+                    BackgroundColor="#3C2F2F"
+                    TextColor="#FFD700"
+                    FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+                    CornerRadius="10"
+                    WidthRequest="100"
+                    HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

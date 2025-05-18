@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\mauiProjects\\MyApp-main\\MyApp-main\\MyApp.csproj": {}
+    "D:\\mauiProjects\\MyApp-main\\MyAppGuillaumeFagny\\MyApp.csproj": {}
   },
   "projects": {
-    "D:\\mauiProjects\\MyApp-main\\MyApp-main\\MyApp.csproj": {
+    "D:\\mauiProjects\\MyApp-main\\MyAppGuillaumeFagny\\MyApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\mauiProjects\\MyApp-main\\MyApp-main\\MyApp.csproj",
+        "projectUniqueName": "D:\\mauiProjects\\MyApp-main\\MyAppGuillaumeFagny\\MyApp.csproj",
         "projectName": "MyApp",
-        "projectPath": "D:\\mauiProjects\\MyApp-main\\MyApp-main\\MyApp.csproj",
+        "projectPath": "D:\\mauiProjects\\MyApp-main\\MyAppGuillaumeFagny\\MyApp.csproj",
         "packagesPath": "C:\\Users\\guill\\.nuget\\packages\\",
-        "outputPath": "D:\\mauiProjects\\MyApp-main\\MyApp-main\\obj\\",
+        "outputPath": "D:\\mauiProjects\\MyApp-main\\MyAppGuillaumeFagny\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
@@ -97,6 +97,14 @@
               "version": "[9.0.3, )",
               "autoReferenced": true
             },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
             "System.IO.Ports": {
               "target": "Package",
               "version": "[9.0.2, )"
@@ -159,6 +167,14 @@
               "target": "Package",
               "version": "[9.0.3, )",
               "autoReferenced": true
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.0, )"
             },
             "System.IO.Ports": {
               "target": "Package",
@@ -223,6 +239,14 @@
               "version": "[9.0.3, )",
               "autoReferenced": true
             },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
             "System.IO.Ports": {
               "target": "Package",
               "version": "[9.0.2, )"
@@ -280,6 +304,14 @@
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
               "version": "[9.0.40, )"
+            },
+            "MongoDB.Bson": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.4.0, )"
             },
             "System.IO.Ports": {
               "target": "Package",

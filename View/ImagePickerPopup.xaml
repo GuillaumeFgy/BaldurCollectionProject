@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="MyApp.View.ImagePickerPopup">
+
+    <Border BackgroundColor="#1C1C1C"
+            Padding="20"
+            Stroke="#B8860B"
+            StrokeShape="RoundRectangle 15"
+            StrokeThickness="2">
+
+        <ScrollView>
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="Choisissez une image"
+                       FontSize="20"
+                       TextColor="#FFD700"
+                       FontFamily="CinzelDecorative-Regular.ttf#Cinzel Decorative"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,10" />
+
+                <CollectionView ItemsSource="{Binding ImagePaths}"
+                                SelectionMode="Single"
+                                SelectionChanged="CollectionView_SelectionChanged">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}"
+                                   HeightRequest="100"
+                                   WidthRequest="100"
+                                   Aspect="AspectFill"
+                                   Margin="5"
+                                   BackgroundColor="#2C2C2C" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Border>
+</toolkit:Popup>

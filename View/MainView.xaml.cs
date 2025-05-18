@@ -10,20 +10,23 @@ public partial class MainView : ContentPage
 		this.viewModel = viewModel;
 		InitializeComponent();
 		BindingContext=viewModel;
-        Title = "Home version 1.0";
+        Title = "Home version 2.0";
     }
-	protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-	{
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+    {
         base.OnNavigatedTo(args);
 
-        BindingContext = null;
-		await viewModel.RefreshPage();    
-		BindingContext = viewModel;
-	}
-    public void DisplayPopup(object? sender, EventArgs e) 
-    {
-        var popup = new SimplePopup();
+        // Redirection si non connecté
+        if (Session.CurrentUser == null)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", "Please log in to access this page.", "OK");
+            await Shell.Current.GoToAsync("///LoginView");
+            return;
+        }
 
-        this.ShowPopup(popup);
+        BindingContext = null;
+        await viewModel.RefreshPage();
+        BindingContext = viewModel;
     }
+
 }
